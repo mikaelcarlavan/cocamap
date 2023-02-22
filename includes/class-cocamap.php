@@ -191,9 +191,10 @@ class Cocamap {
 	 */
 	private function define_shortcodes() {
 
-		$plugin_shortcodes = new Cocamap_Shortcodes( $this->get_plugin_name(), $this->get_version() );
+		$plugin_shortcodes = new Cocamap_Shortcodes($this->get_plugin_name(), $this->get_version());
 
 		$this->loader->add_shortcode( 'cocamap', $plugin_shortcodes, 'process_cocamap_shortcode' );
+		$this->loader->add_shortcode( 'cocamaplist', $plugin_shortcodes, 'process_cocamaplist_shortcode' );
 
 	}
 
