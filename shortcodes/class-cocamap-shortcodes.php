@@ -137,10 +137,22 @@ class Cocamap_Shortcodes {
 						
 		}
 
-		$map_id = uniqid();
-
 		// start output
 	    $o = "";
+
+		//en cas d'erreur, on affiche le message
+		if ($http_code == 401) {
+			$body = wp_remote_retrieve_body( $response );
+			$retour = json_decode( $body, true );
+			$o.= '<strong>Oups !, il y a un problème : <br></strong>';
+			$o.= $retour['error']['message'];
+									
+		}
+
+		
+
+		$map_id = uniqid();
+		
 	    // start box
 	    $o .= "<div class=\"cocamap\" style=\"height:".$cocamap_atts['height']."px\" id=\"cocamap-".$map_id."\"></div>"."\r\n";	 
 	 
@@ -161,24 +173,29 @@ class Cocamap_Shortcodes {
 
 				if(!empty($element['center'])){		
 					$todisplay='';
-					$todisplay.=$element['lastname'].' '.$element['firstname'].'<br>';					 
+					if($category_type == 'customer'){
+						$todisplay='<span class="name">'.$element['description_name'].'</span><br>';
+					}else{
+						$todisplay.='<span class="name">'.$element['lastname'].' '.$element['firstname'].'</span><br>';
+					}
+			 			 
 					if($address==1){
-							//$todisplay.=($element['address']).'<br>';
+							$todisplay.='<address>'.nl2br($element['address']).'<br>';
 							$todisplay.=$element['zip'].' ';
-							$todisplay.=$element['town'];
+							$todisplay.=$element['town'].'</address>';
 						} 
 					    if($phone==1){
-					    	$todisplay.='<br>'.$element['phone_perso'];
-					    	$todisplay.='<br>'.$element['phone_mobile'];
+					    	$todisplay.='<br><span class="phone_perso">'.$element['phone_perso'].'</span>';
+					    	$todisplay.='<br><span class="phone_mobile">'.$element['phone_mobile'].'</span>';
 					    }
 					    if($mail==1){
-					    	$todisplay.=$element['mail'];
+					    	$todisplay.='<span class="mail">'.$element['mail'].'</span>';
 					    }
 					    if($website==1){
-					    	$todisplay.=$element['website'];
+					    	$todisplay.='<span class="website">'.$element['website'].'</span>';
 					    }
 					    if($goto ==1){
-					    	$todisplay.=$element['goto'];
+					    	$todisplay.='<span class="goto">'.$element['goto'].'</span>';
 					    }
 
 						$o .= "markers.addLayer(L.marker([".$element['center']."]).bindPopup('".str_replace ( "'", "\'", $todisplay)."'));"."\r\n";
@@ -269,34 +286,49 @@ class Cocamap_Shortcodes {
 
 		// start output
 	    $o = "";
+
+		//en cas d'erreur, on affiche le message
+		if ($http_code == 401) {
+			$body = wp_remote_retrieve_body( $response );
+			$retour = json_decode( $body, true );
+			$o.= '<strong>Oups !, il y a un problème : <br></strong>';
+			$o.= $retour['error']['message'];
+									
+		}
+
 	    // start box
 	    
 	    $o .= '<div class="cocamap" id="cocamap-list">';
 	    
 	    foreach ( $elements as $element){
 	    	
-	    $todisplay = $element['description_name'];					
-		if($address ==1){
-			$todisplay.=$element['description_address'];
+	    $todisplay = '';					
+						if($category_type == 'customer'){
+							$todisplay.='<span class="name">'.$element['description_name'].'</span><br>';
+						}else{
+							$todisplay.='<span class="name">'.$element['lastname'].' '.$element['firstname'].'</span><br>';
+						}
+						
+						if($address==1){
+							$todisplay.='<address>'.nl2br($element['address']).'<br>';
+							$todisplay.=$element['zip'].' ';
+							$todisplay.=$element['town'].'</address>';
+						} 
+					    if($phone==1){
+					    	$todisplay.='<br><span class="phone_perso">'.$element['phone_perso'].'</span>';
+					    	$todisplay.='<br><span class="phone_mobile">'.$element['phone_mobile'].'</span>';
+					    }
+					    if($mail==1){
+					    	$todisplay.='<span class="mail">'.$element['mail'].'</span>';
+					    }
+					    if($website==1){
+					    	$todisplay.='<span class="website">'.$element['website'].'</span>';
+					    }
+					    
+					     $o .= '<div class="cocamap_card">';
+					     $o .= $todisplay;
+					     $o .= '</div>';
 		} 
-	    if($phone ==1){
-	    	$todisplay.=$element['description_phone'];
-	    }
-	    if($mail ==1){
-	    	$todisplay.=$element['description_mail'];
-	    }
-	    if($website ==1){
-	    	$todisplay.=$element['description_website'];
-	    }
-	    if($goto ==1){
-	    	$todisplay.=$element['description_goto'];
-	    }
-	     $o .= '<div class="cocamap_card">';
-	     $o .= $todisplay;
-	     $o .= '</div>';	
-	    }
-
-	    $o .= '</div>';	 
 	 
 	 	return $o;
 
@@ -470,6 +502,18 @@ class Cocamap_Shortcodes {
 			$elements = json_decode( $body, true );
 		}
 
+		// start output
+	    $o = "";
+
+		//en cas d'erreur, on affiche le message
+		if ($http_code == 401) {
+			$body = wp_remote_retrieve_body( $response );
+			$retour = json_decode( $body, true );
+			$o.= '<strong>Oups !, il y a un problème : <br></strong>';
+			$o.= $retour['error']['message'];
+									
+		}
+
 		//on trie par nom de ville
 		uasort($elements, array($this,'tritown'));
 		
@@ -483,32 +527,35 @@ class Cocamap_Shortcodes {
 		ksort($elements_by_zip);
 			
 		//on affiche la liste	
-	    $o = "";
 	    $o .= '<div class="cocamap" id="cocamap-list">';
 
 
 	    foreach ($elements_by_zip as $dpt=>$items){
-	    	//if($dpt>0){
+	    	
 				 $o.='<h3 class="cocamap_title_list">'.$dpt.' - '.$departements[$dpt].'</h3>';  	
 				 
 		    	foreach($items as $element){ 		
 			    	
 					    $todisplay = '';					
-						$todisplay.=$element['lastname'].' '.$element['firstname'].'<br>';
+						if($category_type == 'customer'){
+							$todisplay='<span class="name">'.$element['description_name'].'</span><br>';
+						}else{
+							$todisplay.='<span class="name">'.$element['lastname'].' '.$element['firstname'].'</span><br>';
+						}
 						if($address==1){
-							$todisplay.=nl2br($element['address']).'<br>';
+							$todisplay.='<address>'.nl2br($element['address']).'<br>';
 							$todisplay.=$element['zip'].' ';
-							$todisplay.=$element['town'];
+							$todisplay.=$element['town'].'</address>';
 						} 
 					    if($phone==1){
-					    	$todisplay.='<br>'.$element['phone_perso'];
-					    	$todisplay.='<br>'.$element['phone_mobile'];
+					    	$todisplay.='<br><span class="phone_perso">'.$element['phone_perso'].'</span>';
+					    	$todisplay.='<br><span class="phone_mobile">'.$element['phone_mobile'].'</span>';
 					    }
 					    if($mail==1){
-					    	$todisplay.=$element['mail'];
+					    	$todisplay.='<span class"mail">'.$element['mail'].'</span>';
 					    }
 					    if($website==1){
-					    	$todisplay.=$element['website'];
+					    	$todisplay.='<span class"website">'.$element['website'].'</span>';
 					    }
 					    
 					     $o .= '<div class="cocamap_card">';
@@ -516,10 +563,11 @@ class Cocamap_Shortcodes {
 					     $o .= '</div>';
 					
 				}
-			//}
+			
 				 
 	    }
 		$o .= '</div>';
+
 	    
 	 
 	 	return $o;

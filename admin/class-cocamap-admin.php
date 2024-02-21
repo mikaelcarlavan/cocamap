@@ -315,13 +315,14 @@ class Cocamap_Admin {
 		 <ul>
 		 	<li><?php _e('[cocamap] affiche une carte avec les élements sous forme de marker'); ?></li>
 		 	<li><?php _e('[cocamaplist] affiche les éléments sous forme de liste'); ?></li>
+		 	<li><?php _e('[cocamaplistdptfr] affiche les éléments sous forme de liste classée par département et par nom de localité alphabétique (uniquement la France)'); ?></li>
 		 		
 		 	</ul>
 		 <h2><?php _e('Paramètres des Shortcodes'); ?></h2>
 		 <ul>
-		 	<li><?php _e('type → customer / contact selon que vous souhaitiez les tiers, ou les contacts'); ?></li>
+		 	<li><?php _e('type → customer / contact selon que vous souhaitiez les tiers, ou les contacts. <b>Obligatoire</b>'); ?></li>
 		 	<li><?php _e('height → hauteur en pixel de la carte'); ?></li>
-		 	<li><?php _e('cid → id de la catégorie dolibarr dont vous souhaitez afficher les éléments'); ?></li>
+		 	<li><?php _e('cid → id de la catégorie client ou contact dolibarr dont vous souhaitez afficher les éléments. <b>Obligatoire</b>'); ?></li>
 		 	<li><?php _e('zoom → valeur de 1 à 13 pour le niveau de zoom de la carte'); ?></li>
 		 	<li><?php _e('center → coordonées GPS WGS84 pour indiquer le centre de la carte'); ?></li>
 		 	<li><?php _e('address → 1/0 afficher ou non l\'adresse, le code postal et la ville'); ?></li>
@@ -333,7 +334,8 @@ class Cocamap_Admin {
 		 <h2><?php _e('Exemples'); ?></h2>
 		  <ul>
 		 	<li><?php _e('[cocamap type="customer" height="600" cid="16" zoom="6" center="48.866667,2.333333" address="0"]'); ?></li>
-		 	<li><?php _e('[cocamaplist type="contact" cid="15" goto="0"]'); ?></li>
+		 	<li><?php _e('[cocamaplist type="contact" cid="15"]'); ?></li>
+		 	<li><?php _e('[cocamaplistdptfr type="contact" cid="15" address="0" phone="1"]'); ?></li>
 		 	</ul>
 		 </div>
 		 <?php
