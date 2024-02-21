@@ -195,6 +195,7 @@ class Cocamap {
 
 		$this->loader->add_shortcode( 'cocamap', $plugin_shortcodes, 'process_cocamap_shortcode' );
 		$this->loader->add_shortcode( 'cocamaplist', $plugin_shortcodes, 'process_cocamaplist_shortcode' );
+		$this->loader->add_shortcode( 'cocamaplistdptfr', $plugin_shortcodes, 'process_cocamaplistdptfr_shortcode' );
 
 	}
 

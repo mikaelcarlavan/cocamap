@@ -2,5 +2,6 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
-#cocamap-list{display:flex;flex-wrap:wrap;justify-content:space-between;}
-.cocamap_card{width:calc(48% - 20px);background:#f9f5f5; padding : 10px; border-radius:3px; margin-bottom:20px;}
+#cocamap-list{display:flex;flex-wrap:wrap;justify-content:start;max-width:90vw}
+.cocamap_card{width:calc(33% - 20px);background:#f9f5f5; padding : 10px; border-radius:3px; margin-bottom:20px;margin-right:20px;}
+.cocamap_title_list{width:100%;}
